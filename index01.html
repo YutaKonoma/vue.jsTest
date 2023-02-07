@@ -1,40 +1,63 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://unpkg.com/vue@next"></script>
-    <script src="VeuApp.js" defer></script>
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <script src="https://unpkg.com/vue@next"></script>
-        <script src="Testapp.js" defer></script>
-      </head>
+    <script src="Testapp.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{title}}</h1>
+      <dl>
+        <dt><label for="task">タスク名：</label></dt>
+        <dd><input type="text" id="task" v-model="task" /></dd>
 
-      <body>
-        <div id="app"></div>
-        <div class="Title"><h1>タスク管理アプリ</h1></div>
-        <dt><label>タスクを追加</label></dt>
-          <dd><input type="text" v-model="task"/></dd>
-         <dt><label>期日 </label></dt>
-         <dd><input type="date"/></dd>
-         
+        <dt><label for="deadline">期日：</label></dt>
+        <dd><input type="date" id="deadline" v-model="deadline" /></dd>
+
         <dt><label for="priority">優先度：</label></dt>
         <dd>
-            <select id="priority" v-model="priority">
-                <option :value="index" v-for="(val,index) in priorities" :key="index">{{val}}</option>
-            </select>
+          <select id="priority" v-model="priority">
+            <option :value="index" v-for="(val,index) in priorities" :key="index">{{val}}</option>
+          </select>
         </dd>
-          
-          <p><button type="button" @click="addTask">追加</button></p>
-    
-          <h3>タスク一覧</h3>
-          <p>{{tasklist}}</p>
-
-
-      </body>
+      </dl>
+      <button type="button" @click="setTask">登録</button>
+      <hr />
+      <h2>タスク一覧</h2>
+      <dl>
+        <!-- 期日での並び替え -->
+        <dt><label for="sort">並び替え</label></dt>
+        <dd>
+          <select id="sort" v-model="sort">
+            <option value="asc">昇順</option>
+            <option value="desc">降順</option>
+          </select>
+        </dd>
+        <!-- 優先度での絞り込み -->
+        <dt><label for="filter">優先度</label></dt>
+        <dd>
+          <select id="filter" v-model="filter">
+            <option value="all">全て</option>
+            <option :value="index" v-for="(val,index) in priorities" :key="index">{{val}}</option>
+          </select>
+        </dd>
+        <!-- フリーワード検索 -->
+        <dt><label for="search">フリーワード検索</label></dt>
+        <dd><input type="search" id="search" v-model="search" /></dd>
+      </dl>
+      <hr />
+      <ul>
+        <li v-for="(val, index) in results" :key="val">
+          <p>タスク名：{{val.task}}</p>
+          <p>優先度:{{priorities[val.priority]}}</p>
+          <p>登録日：{{dataFormat(val.publish)}}</p>
+        </li>
+      </ul>
+      <!-- <p>{{tasklist}}</p> -->
+    </div>
+  </body>
+</html>
